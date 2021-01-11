@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+
+  opbeans-php-backend:
+    build:
+      context: .
+      args:
+        - PHP_VERSION=${PHP_VERSION:-7.4}
+    ports:
+      - "127.0.0.1:${OPBEANS_PHP_PORT:-8080}:80"
+    env_file:
+      - .env
+    volumes:
+      - .:/var/www/html:cached
+    depends_on:
+      - opbeans-php-backend-db
+
+  opbeans-php-backend-db:
+    image: mysql:5.6
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - opbeans-php-backend-db:/var/lib/mysql
+
+volumes:
+  opbeans-php-backend-db:
