@@ -2,28 +2,28 @@ ARG PHP_VERSION=7.4
 FROM php:${PHP_VERSION}-apache
 
 # install all the system dependencies and enable PHP modules
-RUN apt-get update && apt-get install -y
-  libicu-dev
-  libpq-dev
-  libpng-dev
-  libmcrypt-dev
-  mysql-client
-  git
-  zip
-  unzip
+RUN apt-get update && apt-get install -qq -y \
+  libicu-dev \
+  libmcrypt-dev \
+  libpq-dev \
+  libpng-dev \
+  git \
+  unzip \
+  zip \
   && rm -r /var/lib/apt/lists/*
-  && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd
-  && docker-php-ext-install
-  intl
-  mbstring
-  mcrypt
-  pcntl
-  pdo_mysql
-  pdo_pgsql
-  pgsql
+
+RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
+  && docker-php-ext-install \
+  gd \
+  intl \
+  mcrypt \
+  mbstring \
+  pcntl \
+  opcache \
+  pdo_mysql \
+  pdo_pgsql \
+  pgsql \
   zip
-  gd
-  opcache
 
 # install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
