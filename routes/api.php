@@ -18,5 +18,4 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('profile','API\UserController@getProfile');
-Route::get('user-list','API\UserController@getUserList');
+Route::get('dummy','API\CustomersController@getCustomersCount');

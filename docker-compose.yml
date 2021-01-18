@@ -3,11 +3,13 @@ version: "2.1"
 services:
 
   opbeans-php-backend-db:
+    container_name: opbeans-php-backend-db
     image: docker.io/bitnami/mariadb:10.2-debian-10
     env_file:
       - .env
 
   opbeans-php-backend:
+    container_name: opbeans-php-backend
     image: docker.io/bitnami/laravel:6-debian-10
     ports:
       - ${OPBEANS_PHP_PORT:-3000}:3000
