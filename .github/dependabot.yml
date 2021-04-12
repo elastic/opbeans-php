@@ -1,0 +1,21 @@
+---
+version: 2
+updates:
+  # Enable version updates for composer
+  - package-ecosystem: "composer"
+    # Look for `composer.json` file in the `root` directory
+    directory: "/"
+    # Check for updates once a week
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - "elastic/apm-agent-php"
+
+  # Enable version updates for Docker
+  - package-ecosystem: "docker"
+    directory: "/"
+    # Check for updates once a week
+    schedule:
+      interval: "weekly"
+    reviewers:
+      - "elastic/apm-agent-php"
