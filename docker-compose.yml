@@ -1,24 +1,48 @@
-version: "2.1"
+version: '2.1'
 
 services:
-
-  opbeans-php-backend-db:
-    container_name: opbeans-php-backend-db
-    image: docker.io/bitnami/mariadb:10.2-debian-10
-    env_file:
-      - .env
-
-  opbeans-php-backend:
-    container_name: opbeans-php-backend
-    image: docker.io/bitnami/laravel:6-debian-10
-    ports:
-      - ${OPBEANS_PHP_PORT:-3000}:3000
-    env_file:
-      - .env
+  nginx:
+    image: nginx:latest
     volumes:
-      - ./:/app
+      - ./:/var/www
+      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - 8876:80
+    #        networks:
+    #            - elastic
     depends_on:
-      - opbeans-php-backend-db
+      - app
+    container_name: opbeans_nginx
 
-volumes:
-  opbeans-php-backend-db:
+  app:
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    #        networks:
+    #            - elastic
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - db
+    container_name: opbeans_app
+
+  db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./tmp/db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: lardocker
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 8102:3306
+    #        networks:
+    #            - elastic
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    container_name: opbeans_db
+
+#networks:
+#    default:
+#        external:
+#            name: elastic
+
