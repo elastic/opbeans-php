@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\CustomersController;
+use App\Http\Controllers\Api\OrdersController;
 use App\Http\Controllers\Api\ProductsController;
-use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,10 +16,15 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'products'], function () {
+    Route::get('/', [ProductsController::class, 'products']);
+    Route::get('/top', [ProductsController::class, 'top']);
+    Route::get('/{product}', [ProductsController::class, 'product']);
 });
 
-Route::get('/products', [ProductsController::class, 'products']);
-Route::get('/products/{product}', [ProductsController::class, 'product']);
+Route::get('/stats', [CustomersController::class, 'stats']);
+Route::get('/orders', [OrdersController::class, 'orders']);
+
+//Route::get('/products/top', [ProductsController::class, 'top']);
+//Route::get('/products', [ProductsController::class, 'products']);
+//Route::get('/products/{product}', [ProductsController::class, 'product']);

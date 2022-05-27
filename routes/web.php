@@ -17,9 +17,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/dashboard', function () {
+    return view('welcome');
+});
 Route::get('/products', function () {
     return view('welcome');
 });
+Route::get('/orders', function () {
+    return view('welcome');
+});
+Route::get('/products/{id}', function () {
+    return view('welcome');
+});
+Route::redirect('/*', '/');
 Route::get('/return-error', function () {
     return response()->json(['message' => 'error message'], 500);
 });

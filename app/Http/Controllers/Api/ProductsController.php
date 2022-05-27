@@ -9,37 +9,41 @@ class ProductsController extends Controller
 {
     public function products()
     {
-        return '
-          [  {
-	"name": "Brazil Verde, Italian Roast",
-	"type_name": "Dark Roast Coffee",
-	"id": 1,
-	"sold": 57433,
-	"type_id": 3,
-	"sku": "OP-DRC-C1",
-	"selling_price": 3200,
-	"stock": 80,
-	"cost": 1500,
-	"description": "Soft, nutty, low acid, with nice bitter-sweet chocolate tastes."
-}]
-        ';
+        return Products::all();
     }
 
-    public function product()
+    public function product($id)
     {
+        return Products::findOrFail($id);
+    }
+
+    public function top()
+    {
+        return Products::all();
         return '
-            {
-	"name": "Brazil Verde, Italian Roast",
-	"type_name": "Dark Roast Coffee",
-	"id": 1,
-	"sold": 57433,
-	"type_id": 3,
-	"sku": "OP-DRC-C1",
-	"selling_price": 3200,
-	"stock": 80,
-	"cost": 1500,
-	"description": "Soft, nutty, low acid, with nice bitter-sweet chocolate tastes."
-}
+[
+	{
+		"name": "Jamaica Blue Mountain, Vienna Roast",
+		"id": 2,
+		"sold": 113307,
+		"sku": "OP-MRC-C2",
+		"stock": 0
+	},
+	{
+		"name": "Brazil Verde, Italian Roast",
+		"id": 1,
+		"sold": 57433,
+		"sku": "OP-DRC-C1",
+		"stock": 80
+	},
+	{
+		"name": "Colombian Supremo, Cinnamon Roast",
+		"id": 3,
+		"sold": 57261,
+		"sku": "OP-LRC-C3",
+		"stock": 150
+	}
+]
         ';
     }
 }
