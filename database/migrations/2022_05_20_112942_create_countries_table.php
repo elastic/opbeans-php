@@ -12,30 +12,6 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
-            $table->id();
-            $table->string('full_name');
-            $table->string('company_name');
-            $table->string('email');
-            $table->string('address');
-            $table->string('postal_code');
-            $table->string('city');
-            $table->string('country');
-        });
-
-        Schema::create('order_lines', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('amount');
-            $table->unsignedBigInteger('product_id');
-        });
-
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('created_at', 4000);
-            $table->unsignedBigInteger('customer_id');
-        });
-
         Schema::create('product_types', function (Blueprint $table) {
             $table->id();
             $table->string('name', 1000);
@@ -49,7 +25,31 @@ return new class extends Migration {
             $table->unsignedBigInteger('stock');
             $table->unsignedBigInteger('cost');
             $table->unsignedBigInteger('selling_price');
-            $table->unsignedBigInteger('type_id');
+            $table->foreignId('type_id')->constrained('product_types');
+        });
+
+        Schema::create('customers', function (Blueprint $table) {
+            $table->id();
+            $table->string('full_name');
+            $table->string('company_name');
+            $table->string('email');
+            $table->string('address');
+            $table->string('postal_code');
+            $table->string('city');
+            $table->string('country');
+        });
+
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
+            $table->string('created_at', 4000);
+            $table->foreignId('customer_id')->constrained('customers');
+        });
+
+        Schema::create('order_lines', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('order_id')->constrained('orders');
+            $table->unsignedBigInteger('amount');
+            $table->foreignId('product_id')->constrained('products');
         });
     }
 
