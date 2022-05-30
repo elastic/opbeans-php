@@ -23,6 +23,7 @@ Route::group(['prefix' => 'products'], function () {
 });
 
 Route::get('/stats', [CustomersController::class, 'stats']);
+Route::get('/customers', [CustomersController::class, 'customers']);
 Route::get('/orders', [OrdersController::class, 'orders']);
 
 //Route::get('/products/top', [ProductsController::class, 'top']);

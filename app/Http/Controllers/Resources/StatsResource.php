@@ -8,14 +8,28 @@ class StatsResource extends JsonResource
 {
     public function toArray($request): array
     {
+        $products = $this->get('products');
+        $customers = $this->get('customers');
+        $orders = $this->get('orders');
+
+        $revenue = 0;
+        $cost = 0;
+        $profit = 0;
+
+        foreach ($products as $product){
+            $revenue += $product->orderLines->sum('amount') * $product->selling_price;
+            $cost += $product->orderLines->sum('amount') * $product->cost;
+            $profit += $product->orderLines->sum('amount') * ($product->selling_price - $product->cost);
+        }
+
         return [
-            'products' => $this->get('products_count'),
-            'customers' => $this->get('customers_count'),
-            'orders' => $this->get('orders_count'),
+            'products' => $products->count(),
+            'customers' => $customers->count(),
+            'orders' => $orders->count(),
             "numbers" => [
-                "profit" => 2717097200,
-                "revenue" => 5184667700,
-                "cost" => 2467570500
+                "profit" => $profit,
+                "revenue" => $revenue,
+                "cost" => $cost
             ],
         ];
     }

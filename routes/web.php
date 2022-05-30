@@ -26,6 +26,9 @@ Route::get('/products', function () {
 Route::get('/orders', function () {
     return view('welcome');
 });
+Route::get('/customers', function () {
+    return view('welcome');
+});
 Route::get('/products/{id}', function () {
     return view('welcome');
 });

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductTypes extends Model
 {
-    public function products(): hasMany
+    public function products(): HasMany
     {
         return $this->hasMany(Products::class, 'type_id');
     }

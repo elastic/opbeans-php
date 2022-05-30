@@ -9,6 +9,6 @@ class OrdersController extends Controller
 {
     public function orders()
     {
-        return Orders::all();
+        return Orders::all()->take(100);
     }
 }

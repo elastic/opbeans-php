@@ -9,7 +9,7 @@ class OrderLines extends Model
 {
     public function products(): hasOne
     {
-        return $this->hasOne(Products::class, 'id');
+        return $this->hasOne(Products::class, 'id', 'product_id');
     }
 
     public function order(): hasOne
