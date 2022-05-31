@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Products extends Model
 {
-    public function productTypes(): hasOne
+    public function productTypes(): HasOne
     {
         return $this->hasOne(ProductTypes::class, 'id', 'type_id');
     }
 
-    public function orderLines(): hasMany
+    public function orderLines(): HasMany
     {
         return $this->hasMany(OrderLines::class, 'product_id');
     }
