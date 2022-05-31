@@ -19,13 +19,18 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductsController::class, 'products']);
     Route::get('/top', [ProductsController::class, 'top']);
-    Route::get('/{product}', [ProductsController::class, 'product']);
+    Route::get('/{productId}', [ProductsController::class, 'product']);
+    Route::get('/{productId}/customers', [ProductsController::class, 'customers']);
+});
+
+Route::group(['prefix' => 'customers'], function () {
+    Route::get('/', [CustomersController::class, 'customers']);
+    Route::get('/{customerId}', [CustomersController::class, 'customer']);
+});
+
+Route::group(['prefix' => 'orders'], function () {
+    Route::get('/', [OrdersController::class, 'orders']);
+    Route::get('/{orderId}', [OrdersController::class, 'order']);
 });
 
 Route::get('/stats', [CustomersController::class, 'stats']);
-Route::get('/customers', [CustomersController::class, 'customers']);
-Route::get('/orders', [OrdersController::class, 'orders']);
-
-//Route::get('/products/top', [ProductsController::class, 'top']);
-//Route::get('/products', [ProductsController::class, 'products']);
-//Route::get('/products/{product}', [ProductsController::class, 'product']);

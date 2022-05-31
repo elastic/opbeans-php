@@ -13,26 +13,10 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/dashboard', function () {
-    return view('welcome');
-});
-Route::get('/products', function () {
-    return view('welcome');
-});
-Route::get('/orders', function () {
-    return view('welcome');
-});
-Route::get('/customers', function () {
-    return view('welcome');
-});
-Route::get('/products/{id}', function () {
-    return view('welcome');
-});
-Route::redirect('/*', '/');
 Route::get('/return-error', function () {
     return response()->json(['message' => 'error message'], 500);
 });
+
+Route::get('/{slug?}', function () {
+    return view('welcome');
+})->where('slug', '(.*)');
