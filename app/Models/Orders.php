@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Orders extends Model
 {
-    public function customer(): hasOne
+    public function customer(): HasOne
     {
         return $this->hasOne(Customers::class, 'id');
     }

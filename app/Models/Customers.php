@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customers extends Model
 {
-    public function orders(): hasMany
+    public function orders(): HasMany
     {
         return $this->hasMany(Orders::class, 'customer_id', 'id');
     }
