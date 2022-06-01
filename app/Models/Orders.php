@@ -23,9 +23,4 @@ class Orders extends Model
     {
         $this->created_at = $createdAt;
     }
-
-    public function setCustomer($customer): void
-    {
-        $this->customer = $customer;
-    }
 }

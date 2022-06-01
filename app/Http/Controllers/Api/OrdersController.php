@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Customers;
 use App\Models\Orders;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
@@ -23,8 +24,12 @@ class OrdersController extends Controller
     public function createOrder(Request $request)
     {
         $customer = Customers::findOrFail($request->get('customer_id'));
-//        $customer->orders->save(['created_at' => "2017-06-07 12:16:13.655000"]);
-        $order = Orders::create(['created_at' => "2017-06-07 12:16:13.655000", 'customer_id' => 3]);
-        dd('createOrder', $request);
+
+        $order = Orders::create([
+            'created_at' => Carbon::now()->format('Y-m-d'),
+            'customer_id' => $customer->id
+        ]);
+
+        return $order;
     }
 }
