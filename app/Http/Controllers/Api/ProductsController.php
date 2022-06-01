@@ -3,47 +3,44 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderLines;
 use App\Models\Products;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
-    public function products()
+    public function products(): Collection
     {
         return Products::all();
     }
 
-    public function product($id)
+    public function product($id): Products|Collection
     {
         return Products::findOrFail($id);
     }
 
-    public function top()
+    public function customers($id): Collection
     {
-        return Products::all();
-        return '
-[
-	{
-		"name": "Jamaica Blue Mountain, Vienna Roast",
-		"id": 2,
-		"sold": 113307,
-		"sku": "OP-MRC-C2",
-		"stock": 0
-	},
-	{
-		"name": "Brazil Verde, Italian Roast",
-		"id": 1,
-		"sold": 57433,
-		"sku": "OP-DRC-C1",
-		"stock": 80
-	},
-	{
-		"name": "Colombian Supremo, Cinnamon Roast",
-		"id": 3,
-		"sold": 57261,
-		"sku": "OP-LRC-C3",
-		"stock": 150
-	}
-]
-        ';
+        $customers = OrderLines::select()
+            ->leftJoin('orders', 'order_lines.order_id', '=', 'orders.id')
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->where('order_lines.product_id', $id)
+            ->get();
+
+        return $customers;
+    }
+
+    public function top(): array
+    {
+        $topProducts = DB::select("
+            SELECT products.id as id, products.sku as sku, products.name as name, products.stock as stock, sum(order_lines.amount) as sold
+            FROM order_lines
+            LEFT JOIN products
+            ON order_lines.product_id = products.id
+            GROUP BY products.id order by sold desc
+        ");
+
+        return $topProducts;
     }
 }

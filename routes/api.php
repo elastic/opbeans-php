@@ -31,6 +31,7 @@ Route::group(['prefix' => 'customers'], function () {
 Route::group(['prefix' => 'orders'], function () {
     Route::get('/', [OrdersController::class, 'orders']);
     Route::get('/{orderId}', [OrdersController::class, 'order']);
+    Route::post('/', [OrdersController::class, 'createOrder']);
 });
 
 Route::get('/stats', [CustomersController::class, 'stats']);
