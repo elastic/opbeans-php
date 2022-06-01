@@ -16,6 +16,7 @@ class StatsResource extends JsonResource
         $cost = 0;
         $profit = 0;
 
+        // Special created problem n+1
         foreach ($products as $product){
             $revenue += $product->orderLines->sum('amount') * $product->selling_price;
             $cost += $product->orderLines->sum('amount') * $product->cost;
