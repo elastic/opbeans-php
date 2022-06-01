@@ -6,14 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Customers;
 use App\Models\Orders;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class OrdersController extends Controller
 {
     public function orders(): Collection
     {
-        return Orders::all()->take(100);
+        return Orders::select('customers.full_name as customer_name', 'orders.*')
+            ->leftJoin('customers', 'orders.customer_id', '=', 'customers.id')
+            ->take(100)
+            ->get();
     }
 
     public function order($id): Orders
