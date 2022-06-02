@@ -18,8 +18,10 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['prefix' => 'products'], function () {
     Route::get('/', [ProductsController::class, 'products']);
+    Route::post('/', [ProductsController::class, 'create']);
     Route::get('/top', [ProductsController::class, 'top']);
     Route::get('/{productId}', [ProductsController::class, 'product']);
+    Route::put('/{productId}', [ProductsController::class, 'update']);
     Route::get('/{productId}/customers', [ProductsController::class, 'customers']);
 });
 
@@ -31,6 +33,7 @@ Route::group(['prefix' => 'customers'], function () {
 Route::group(['prefix' => 'orders'], function () {
     Route::get('/', [OrdersController::class, 'orders']);
     Route::get('/{orderId}', [OrdersController::class, 'order']);
+    Route::delete('/{orderId}', [OrdersController::class, 'remove']);
     Route::post('/', [OrdersController::class, 'createOrder']);
 });
 
