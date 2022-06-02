@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OrderLines;
 use App\Models\Products;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
@@ -42,5 +43,19 @@ class ProductsController extends Controller
         ");
 
         return $topProducts;
+    }
+
+    public function create(Request $request)
+    {
+        return Products::create($request->all());
+    }
+
+    public function update(Request $request, $id)
+    {
+        $product = Products::findOrFail($id);
+
+        $product->updateOrFail($request->all());
+
+        return $product;
     }
 }

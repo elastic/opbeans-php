@@ -8,6 +8,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Products extends Model
 {
+    public $timestamps = false;
+
+    protected $fillable = [
+        'sku',
+        'name',
+        'description',
+        'stock',
+        'cost',
+        'selling_price',
+        'type_id',
+    ];
+
     public function productTypes(): HasOne
     {
         return $this->hasOne(ProductTypes::class, 'id', 'type_id');
