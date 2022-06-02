@@ -35,4 +35,9 @@ class OrdersController extends Controller
 
         return $order;
     }
+
+    public function remove($id)
+    {
+        Orders::where('id', $id)->delete();
+    }
 }
