@@ -1,5 +1,7 @@
 FROM php:8.0-fpm
 
+WORKDIR /var/www
+
 RUN apt-get update && apt-get install -y \
       apt-utils \
       libpq-dev \
@@ -16,12 +18,16 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 
+COPY ./ /var/www/
+
+RUN chmod a+x /var/www/_docker/app/docker-entrypoint.sh
+
 ENV ELASTIC_APM_SERVER_URL=http://apm-server:8200
 ENV ELASTIC_APM_LOG_LEVEL=TRACE
 ENV ELASTIC_APM_SERVICE_NAME="Laravel APP"
 
-RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
-    && dpkg -i /tmp/apm-gent-php.deb
+#RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
+#    && dpkg -i /tmp/apm-gent-php.deb
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
@@ -30,4 +36,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
     --filename=composer \
     --install-dir=/usr/local/bin
 
+RUN composer install
+
 WORKDIR /var/www
+
+ENTRYPOINT ["/var/www/_docker/app/docker-entrypoint.sh"]
