@@ -1,6 +1,16 @@
 # opbeans-php
 PHP backend implementation for Opbeans, Elastic APM demo app
 
+## Run locally
+To run locally, including Server, Kibana and Elasticsearch, use the provided docker compose file by running the commands
+```bash
+docker-compose build
+```
+
+```bash
+docker-compose up
+```
+
 # Api-routes list:
 
 1. http://localhost:8876/api/orders - Create order
