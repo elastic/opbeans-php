@@ -26,8 +26,8 @@ ENV ELASTIC_APM_SERVER_URL=http://apm-server:8200
 ENV ELASTIC_APM_LOG_LEVEL=TRACE
 ENV ELASTIC_APM_SERVICE_NAME="Laravel APP"
 
-#RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
-#    && dpkg -i /tmp/apm-gent-php.deb
+RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
+    && dpkg -i /tmp/apm-gent-php.deb
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
