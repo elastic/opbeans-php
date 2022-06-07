@@ -11,6 +11,9 @@ docker-compose build
 docker-compose up
 ```
 
+# Web UI:
+    http://localhost:8876
+
 # Api-routes list:
 
 1. http://localhost:8876/api/orders - Create order
