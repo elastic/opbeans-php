@@ -8,10 +8,11 @@ use App\Models\Customers;
 use App\Models\OrderLines;
 use App\Models\Orders;
 use App\Models\Products;
+use Illuminate\Database\Eloquent\Collection;
 
 class CustomersController extends Controller
 {
-    public function stats()
+    public function stats(): array
     {
         return (new StatsResource(collect([
             'products' => Products::all(),
@@ -21,8 +22,13 @@ class CustomersController extends Controller
         ])))->jsonSerialize();
     }
 
-    protected function customers()
+    protected function customers(): Collection
     {
         return Customers::all()->take(100);
+    }
+
+    protected function customer($id): Customers
+    {
+        return Customers::findOrFail($id);
     }
 }
