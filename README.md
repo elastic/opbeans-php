@@ -12,11 +12,11 @@ docker-compose up
 ```
 
 # Web UI:
-    http://localhost:8876
+    http://localhost:8000
 
 # Api-routes list:
 
-1. http://localhost:8876/api/orders - Create order
+1. http://localhost:8000/api/orders - Create order
             
         METHOD:POST
 
@@ -32,7 +32,7 @@ docker-compose up
            "id": 50008
        }
 
-2. http://localhost:8876/api/products - Create product
+2. http://localhost:8000/api/products - Create product
 
         METHOD:POST
 
@@ -59,7 +59,7 @@ docker-compose up
              "id": 13
        }
 
-3. http://localhost:8876/api/products/1 - Update product
+3. http://localhost:8000/api/products/1 - Update product
    
         METHOD:PUT
 
@@ -86,7 +86,7 @@ docker-compose up
              "type_id": 3
        }
 
-4. http://localhost:8876/api/orders/1 - Delete product
+4. http://localhost:8000/api/orders/1 - Delete product
 
         METHOD:DELETE
         Response: 200 Ok

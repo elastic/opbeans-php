@@ -1,38 +1,38 @@
 version: '2.1'
 
 services:
-  nginx:
+  opbeans-php-nginx:
     image: nginx:latest
     volumes:
       - ./:/var/www
       - ./_docker/nginx/conf.d:/etc/nginx/conf.d
     ports:
-      - 8876:80
+      - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
+    environment:
+      - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-opbeans-php}
+      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
+      - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
+      - ELASTIC_APM_LOG_LEVEL=${ELASTIC_APM_LOG_LEVEL}
     depends_on:
-      - app
-    container_name: opbeans_nginx
+      - opbeans-php-app
 
-  app:
+  opbeans-php-app:
     build:
       context: .
       dockerfile: _docker/app/Dockerfile
-    volumes:
-      - ./:/var/www
     depends_on:
-      db:
+      opbeans-php-db:
         condition: service_healthy
-    container_name: opbeans_app
 
-  db:
+  opbeans-php-db:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_DATABASE: lardocker
+      MYSQL_DATABASE: opbeans_php
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 8102:3306
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
-    container_name: opbeans_db
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
@@ -111,7 +111,7 @@ services:
       SERVER_NAME: kibana.example.org
       ELASTICSEARCH_URL: http://elasticsearch:9200
     ports:
-      - "127.0.0.1:${KIBANA_PORT:-5601}:5601"
+      - "${KIBANA_HOST:-127.0.0.1}:${KIBANA_PORT:-5601}:5601"
     logging:
       driver: 'json-file'
       options:
