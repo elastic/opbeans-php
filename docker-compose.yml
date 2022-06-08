@@ -4,7 +4,7 @@ services:
   opbeans-php-app:
     build: .
     image: opbeans/opbeans-php:latest
-    container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
+    container_name: ${OPBEANS_PHP_APP_CONTAINER_NAME:-opbeans-php-app}
     environment:
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-Opbeans-PHP}
       - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
@@ -14,8 +14,9 @@ services:
       opbeans-php-db:
         condition: service_healthy
 
-  opbeans-php-nginx:
+  opbeans-php-web:
     image: nginx:latest
+    container_name: ${OPBEANS_PHP_WEB_CONTAINER_NAME:-opbeans-php-web}
     volumes:
       - ./:/var/www
       - ./_docker/nginx/conf.d:/etc/nginx/conf.d
