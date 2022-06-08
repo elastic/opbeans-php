@@ -38,7 +38,4 @@ RUN composer install
 RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
     && dpkg -i /tmp/apm-gent-php.deb
 
-# TODO: Remove
-# RUN chmod -R 777 /var/www/storage
-
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
