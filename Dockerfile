@@ -39,6 +39,6 @@ RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/a
     && dpkg -i /tmp/apm-gent-php.deb
 
 # TODO: Remove
-RUN chmod -R 777 /var/www/storage
+# RUN chmod -R 777 /var/www/storage
 
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
