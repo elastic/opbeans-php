@@ -14,11 +14,25 @@ http://localhost:8000
 You can change it by setting `OPBEANS_PHP_HOST` and/or `OPBEANS_PHP_PORT` environment variables.
 For example 
 ```bash
-OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=8976 docker-compose up
+OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker-compose up
 ```
 will make Opbeans-PHP web UI accessible remotely for example
 ```
 http://<my-opbeans-test-VM>:8976
+```
+
+Kibana web UI is accessible at:
+```
+http://localhost:5601
+```
+You can change it by setting `KIBANA_HOST` and/or `KIBANA_PORT` environment variables.
+For example
+```bash
+KIBANA_HOST=0.0.0.0 KIBANA_PORT=9877 docker-compose up
+```
+will make Opbeans-PHP web UI accessible remotely for example
+```
+http://<my-opbeans-test-VM>:9877
 ```
 
 ## How to test locally

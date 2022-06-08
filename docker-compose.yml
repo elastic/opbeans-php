@@ -4,7 +4,7 @@ services:
   opbeans-php-app:
     build:
       context: .
-      dockerfile: _docker/app/Dockerfile
+      dockerfile: Dockerfile
     container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
     environment:
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-Opbeans-PHP}
