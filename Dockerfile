@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 
-COPY ./ /var/www/
+ADD . /var/www/
 
 RUN mkdir -p /usr/bin
 RUN mv /var/www/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
@@ -37,5 +37,7 @@ RUN composer install
 
 RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
     && dpkg -i /tmp/apm-gent-php.deb
+
+RUN chown -R www-data:www-data /var/www
 
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
