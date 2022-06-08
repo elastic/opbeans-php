@@ -44,3 +44,7 @@ phpunit.xml
 
 # Generated files
 _GENERATED/
+
+# For the BATS testing
+bats/
+target/

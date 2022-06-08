@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: _docker/app/Dockerfile
+    container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
     environment:
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-Opbeans-PHP}
       - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
@@ -128,4 +129,3 @@ services:
 volumes:
   esdata:
     driver: local
-

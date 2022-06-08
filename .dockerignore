@@ -1,2 +1,14 @@
 ./vendor
 ./composer.lock
+.ci
+.dockerignore
+.git
+.gitignore
+.gitmodules
+docker-compose*.yml
+Dockerfile
+Makefile
+README.md
+tests
+bats
+target
