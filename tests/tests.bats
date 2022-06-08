@@ -21,13 +21,13 @@ OPBEANS_PHP_WEB_CONTAINER_NAME="opbeans-php-web"
 
 @test "test container is running" {
 	run docker inspect -f {{.State.Running}} $OPBEANS_PHP_APP_CONTAINER_NAME
-	run docker inspect -f {{.State.Running}} OPBEANS_PHP_WEB_CONTAINER_NAME
+	run docker inspect -f {{.State.Running}} $OPBEANS_PHP_WEB_CONTAINER_NAME
 	assert_output --partial 'true'
 }
 
 @test "opbeans is running in port ${PORT}" {
 	sleep 50
-	URL="http://127.0.0.1:$(docker port "OPBEANS_PHP_WEB_CONTAINER_NAME" ${PORT} | cut -d: -f2)"
+	URL="http://127.0.0.1:$(docker port "$OPBEANS_PHP_WEB_CONTAINER_NAME" ${PORT} | cut -d: -f2)"
 	run curl -v --fail --connect-timeout 10 --max-time 30 "${URL}/"
 	assert_success
 	assert_output --partial 'HTTP/1.1 200'
