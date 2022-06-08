@@ -18,21 +18,24 @@ RUN apt-get update && apt-get install -y \
 
 COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 
-COPY _docker/app /var/www/
+COPY ./ /var/www/
+
+RUN mkdir -p /usr/bin
+RUN mv /var/www/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
+RUN chmod a+x /usr/bin/docker-entrypoint.sh
+
+# It's not clear how getting the latest frontend code should work so commenting it out for now
 # Bring the latest frontend code and overwrite (maybe stale) frontend code copied from ./
-COPY --from=opbeans/opbeans-frontend:latest _docker/app /var/www/resources
+# COPY --from=opbeans/opbeans-frontend:latest /app /var/www/resources
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --filename=composer \
     --install-dir=/usr/local/bin
-
 RUN composer install
 
 RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
     && dpkg -i /tmp/apm-gent-php.deb
 
-RUN chmod a+x docker-entrypoint.sh
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
