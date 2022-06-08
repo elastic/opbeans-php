@@ -18,5 +18,5 @@ Route::get('/return-error', function () {
 });
 
 Route::get('/{slug?}', function () {
-    return view('welcome');
+    return view('rendered_by_frontend');
 })->where('slug', '(.*)');
