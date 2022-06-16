@@ -15,11 +15,10 @@ services:
         condition: service_healthy
 
   opbeans-php-web:
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-web
     container_name: ${OPBEANS_PHP_WEB_CONTAINER_NAME:-opbeans-php-web}
-    volumes:
-      - ./:/var/www
-      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
     ports:
       - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
     depends_on:

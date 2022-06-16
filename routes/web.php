@@ -16,7 +16,27 @@ use Illuminate\Support\Facades\Route;
 Route::get('/return-error', function () {
     return response()->json(['message' => 'error message'], 500);
 });
-
-Route::get('/{slug?}', function () {
+Route::get('/', function () {
     return view('rendered_by_frontend');
-})->where('slug', '(.*)');
+});
+Route::get('/dashboard', function () {
+    return view('rendered_by_frontend');
+});
+Route::get('/products', function () {
+    return view('rendered_by_frontend');
+});
+Route::get('/orders', function () {
+    return view('rendered_by_frontend');
+});
+Route::get('/orders/{orderId}', function () {
+    return view('rendered_by_frontend');
+});
+Route::get('/customers', function () {
+    return view('rendered_by_frontend');
+});
+Route::get('/customers/{customerId}', function () {
+    return view('rendered_by_frontend');
+});
+Route::get('/products/{id}', function () {
+    return view('rendered_by_frontend');
+});
