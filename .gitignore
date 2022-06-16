@@ -48,3 +48,6 @@ _GENERATED/
 # For the BATS testing
 bats/
 target/
+
+# Local dev
+/z_local_*
