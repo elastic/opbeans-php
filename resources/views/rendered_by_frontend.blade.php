@@ -1,7 +1,8 @@
 <script>
     window.rumConfig = {
-        serviceName: 'Opbeans-JS',
-        serverUrl: 'http://localhost:8200',
+        serviceName: "{{ env('ELASTIC_APM_JS_SERVICE_NAME') }}",
+        serviceVersion: "{{ env('ELASTIC_APM_JS_SERVICE_VERSION') }}",
+        serverUrl: "{{ env('ELASTIC_APM_JS_SERVER_URL') }}",
         pageLoadTraceId: "{{ $apmCurrentTransaction->getTraceId() }}",
         pageLoadSpanId: "{{ $apmCurrentTransaction->ensureParentId() }}",
         pageLoadSampled: {{ $apmCurrentTransaction->isSampled() ? "true" : "false" }}
