@@ -10,16 +10,18 @@ services:
       - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
       - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
       - ELASTIC_APM_LOG_LEVEL
+      - ELASTIC_APM_JS_SERVER_URL=${ELASTIC_APM_JS_SERVER_URL:-http://localhost:8200}
+      - ELASTIC_APM_JS_SERVICE_NAME=${ELASTIC_APM_JS_SERVICE_NAME:-opbeans-react}
+      - ELASTIC_APM_JS_SERVICE_VERSION
     depends_on:
       opbeans-php-db:
         condition: service_healthy
 
   opbeans-php-web:
-    image: nginx:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-web
     container_name: ${OPBEANS_PHP_WEB_CONTAINER_NAME:-opbeans-php-web}
-    volumes:
-      - ./:/var/www
-      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
     ports:
       - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
     depends_on:

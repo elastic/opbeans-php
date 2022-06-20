@@ -24,9 +24,7 @@ RUN mkdir -p /usr/bin
 RUN mv /var/www/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
 RUN chmod a+x /usr/bin/docker-entrypoint.sh
 
-# It's not clear how getting the latest frontend code should work so commenting it out for now
-# Bring the latest frontend code and overwrite (maybe stale) frontend code copied from ./
-# COPY --from=opbeans/opbeans-frontend:latest /app /var/www/resources
+COPY --from=opbeans/opbeans-frontend:latest /app/build/index.html /var/www/resources/views/index.blade.php
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +15,27 @@ use Illuminate\Support\Facades\Route;
 Route::get('/return-error', function () {
     return response()->json(['message' => 'error message'], 500);
 });
-
-Route::get('/{slug?}', function () {
-    return view('rendered_by_frontend');
-})->where('slug', '(.*)');
+Route::get('/', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
+Route::get('/dashboard', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
+Route::get('/products', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
+Route::get('/orders', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
+Route::get('/orders/{orderId}', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
+Route::get('/customers', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
+Route::get('/customers/{customerId}', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
+Route::get('/products/{id}', function () {
+    return view('rendered_by_frontend', ['apmCurrentTransaction' => Elastic\Apm\ElasticApm::getCurrentTransaction()]);
+});
