@@ -1,5 +1,4 @@
 FROM nginx:latest
-RUN echo $(ls /etc/nginx/)
 
 RUN rm -r /etc/nginx/conf.d/*
 ADD ./_docker/nginx/conf.d /etc/nginx/conf.d

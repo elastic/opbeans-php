@@ -8,4 +8,4 @@
         pageLoadSampled: {{ $apmCurrentTransaction->isSampled() ? "true" : "false" }}
     }
 </script>
-@extends('index')
+@extends('page_from_frontend')
