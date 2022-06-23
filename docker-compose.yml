@@ -30,7 +30,7 @@ services:
   opbeans-python-api:
     image: opbeans/opbeans-python:latest
     ports:
-      - "127.0.0.1:${OPBEANS_PYTHON_PORT:-8001}:3000"
+      - "0.0.0.0:${OPBEANS_PYTHON_PORT:-8001}:3000"
     container_name: opbeans-python-api
     depends_on:
       - opbeans-php-app
