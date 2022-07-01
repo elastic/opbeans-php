@@ -48,3 +48,9 @@ _GENERATED/
 # For the BATS testing
 bats/
 target/
+
+# For local development
+public/ob.js
+resources/views/_local_rendered_by_frontend.blade.php
+_docker/app/Dockerfile
+_local_docker-compose.yml
