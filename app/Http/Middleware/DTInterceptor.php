@@ -10,9 +10,20 @@ class DTInterceptor
 {
     public function handle(Request $request, Closure $next)
     {
-        if (random_int(0, 1) == 1) {
-            $apiRequest = substr($request->url(), strpos($request->url(), "/api/") + 1);
-            $response = Http::get('http://opbeans-python-api:3000/' . $apiRequest)->json();
+        $hostList = [];
+        $services = explode(',', env('OPBEANS_SERVICES'));
+        $probability = floatval(env("OPBEANS_DT_PROBABILITY", "0.5"));
+
+        foreach ($services as $service){
+            if (empty($service) || str_contains($request->path(), 'stats')) {
+                return $next($request);
+            }
+
+            $hostList[] = 'http://' . $service . ':3000/' . $request->path();
+        }
+
+        if( (mt_rand() / mt_getrandmax()) <= $probability){
+            $response = Http::get($hostList[array_rand($hostList)])->json();
 
             abort(response()->json($response));
         }
