@@ -6,6 +6,8 @@ services:
     image: opbeans/opbeans-php:latest
     container_name: ${OPBEANS_PHP_APP_CONTAINER_NAME:-opbeans-php-app}
     environment:
+      - OPBEANS_SERVICES=opbeans-python-api
+      - OPBEANS_DT_PROBABILITY=1
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-Opbeans-PHP}
       - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
       - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
@@ -32,6 +34,22 @@ services:
     ports:
       - "0.0.0.0:${OPBEANS_PYTHON_PORT:-8001}:3000"
     container_name: opbeans-python-api
+    environment:
+      - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-opbeans-python}
+      - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
+      - ELASTIC_APM_JS_SERVER_URL=${ELASTIC_APM_JS_SERVER_URL:-http://localhost:8200}
+      - ELASTIC_APM_JS_SERVICE_NAME=${ELASTIC_APM_JS_SERVICE_NAME:-opbeans-react}
+      - ELASTIC_APM_FLUSH_INTERVAL=5
+      - ELASTIC_APM_TRANSACTION_MAX_SPANS=50
+      - ELASTIC_APM_TRANSACTION_SAMPLE_RATE=0.5
+      - ELASTIC_APM_SOURCE_LINES_ERROR_APP_FRAMES
+      - ELASTIC_APM_SOURCE_LINES_SPAN_APP_FRAMES=5
+      - ELASTIC_APM_SOURCE_LINES_ERROR_LIBRARY_FRAMES
+      - ELASTIC_APM_SOURCE_LINES_SPAN_LIBRARY_FRAMES
+      - ELASTIC_APM_ENVIRONMENT=production
+      - REDIS_URL=redis://redis:6379
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - DATABASE_URL=sqlite:////app/demo/db.sql
     depends_on:
       - opbeans-php-app
 
