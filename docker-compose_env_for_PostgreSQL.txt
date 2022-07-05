@@ -1,5 +1,4 @@
 DB_HOST=opbeans-php-db-pgsql
 DB_PORT=5432
 DB_CONNECTION=pgsql
-DB_DATABASE=postgres
 DB_USERNAME=postgres

@@ -16,7 +16,7 @@ services:
       - DB_HOST=${DB_HOST:-opbeans-php-db-mysql}
       - DB_PORT=${DB_PORT:-3306}
       - DB_CONNECTION=${DB_CONNECTION:-mysql}
-      - DB_DATABASE=${DB_DATABASE:-opbeans_php_db_database}
+      - DB_DATABASE=opbeans_php_db_database
       - DB_USERNAME=${DB_USERNAME:-root}
       - DB_PASSWORD=opbeans_php_db_password
     depends_on:
@@ -51,6 +51,7 @@ services:
     image: postgres:14.4
     restart: always
     environment:
+      - POSTGRES_DB=opbeans_php_db_database
       - POSTGRES_USER=${DB_USERNAME:-postgres}
       - POSTGRES_PASSWORD=opbeans_php_db_password
     healthcheck:
