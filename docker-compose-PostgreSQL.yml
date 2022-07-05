@@ -5,12 +5,10 @@ services:
     build:
       context: .
       args:
-        PHP_DB_extension: pdo_mysql
+        PHP_DB_extension: pdo_pgsql
     image: opbeans/opbeans-php:latest
     container_name: ${OPBEANS_PHP_APP_CONTAINER_NAME:-opbeans-php-app}
     environment:
-      - OPBEANS_SERVICES=opbeans-python-api
-      - OPBEANS_DT_PROBABILITY=1
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-Opbeans-PHP}
       - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
       - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
@@ -18,14 +16,15 @@ services:
       - ELASTIC_APM_JS_SERVER_URL=${ELASTIC_APM_JS_SERVER_URL:-http://localhost:8200}
       - ELASTIC_APM_JS_SERVICE_NAME=${ELASTIC_APM_JS_SERVICE_NAME:-opbeans-react}
       - ELASTIC_APM_JS_SERVICE_VERSION
-      - DB_HOST=opbeans-php-db-mysql
-      - DB_PORT=3306
-      - DB_CONNECTION=mysql
-      - DB_DATABASE=opbeans_php_db_database
-      - DB_USERNAME=root
+      - DB_HOST=opbeans-php-db-pgsql
+      - DB_PORT=5432
+      - DB_CONNECTION=pgsql
+#      - DB_DATABASE=opbeans_php_db_database
+      - DB_DATABASE=postgres
+      - DB_USERNAME=postgres
       - DB_PASSWORD=opbeans_php_db_password
     depends_on:
-      opbeans-php-db-mysql:
+      opbeans-php-db-pgsql:
         condition: service_healthy
 
   opbeans-php-web:
@@ -38,15 +37,16 @@ services:
     depends_on:
       - opbeans-php-app
 
-  opbeans-php-db-mysql:
-    image: mysql:8.0
+  opbeans-php-db-pgsql:
+    image: postgres:14.4
     restart: always
     environment:
-      - MYSQL_DATABASE=opbeans_php_db_database
-      - MYSQL_ROOT_PASSWORD=opbeans_php_db_password
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+#      - POSTGRES_DB=opbeans_php_db_database
+#      - POSTGRES_USER=root
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=opbeans_php_db_password
     healthcheck:
-      test: [ "CMD", "mysqladmin", "--host=localhost" ,"ping" ]
+      test: ["CMD", "pg_isready", "--quiet"]
       timeout: 20s
       retries: 10
 
