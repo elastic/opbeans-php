@@ -24,7 +24,7 @@ RUN mkdir -p /usr/bin
 RUN mv /var/www/docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
 RUN chmod a+x /usr/bin/docker-entrypoint.sh
 
-COPY --from=opbeans/opbeans-frontend:latest /app/build/index.html /var/www/resources/views/index.blade.php
+COPY --from=opbeans/opbeans-frontend:latest /app/build/index.html /var/www/resources/views/page_from_frontend.blade.php
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
