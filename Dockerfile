@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
       zip unzip \
       git && \
       docker-php-ext-install pdo_mysql && \
+      docker-php-ext-install pdo_pgsql && \
       docker-php-ext-install bcmath && \
       docker-php-ext-install gd && \
       docker-php-ext-install zip && \
@@ -35,7 +36,5 @@ RUN composer install
 
 RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
     && dpkg -i /tmp/apm-gent-php.deb
-
-RUN chown -R www-data:www-data /var/www
 
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
