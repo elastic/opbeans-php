@@ -7,6 +7,7 @@ load test_helpers
 IMAGE="bats-opbeans"
 OPBEANS_PHP_APP_CONTAINER_NAME="opbeans-php-app"
 OPBEANS_PHP_WEB_CONTAINER_NAME="opbeans-php-web"
+DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX="docker-compose --env-file docker-compose_env_for_PostgreSQL.txt"
 
 @test "Build docker images" {
 	cd $BATS_TEST_DIRNAME/..
@@ -40,12 +41,12 @@ OPBEANS_PHP_WEB_CONTAINER_NAME="opbeans-php-web"
 
 @test "Build docker images [with PostgreSQL as DB]" {
 	cd $BATS_TEST_DIRNAME/..
-	run docker-compose -f docker-compose-PostgreSQL.yml build
+	run ${DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX} build
 	assert_success
 }
 
 @test "Start docker containers [with PostgreSQL as DB]" {
-	run docker-compose -f docker-compose-PostgreSQL.yml up -d
+	run ${DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX} up -d
 	assert_success
 }
 
@@ -64,6 +65,6 @@ OPBEANS_PHP_WEB_CONTAINER_NAME="opbeans-php-web"
 }
 
 @test "Stop docker containers [with PostgreSQL as DB]" {
-	run docker-compose -f docker-compose-PostgreSQL.yml down -v --remove-orphans
+	run ${DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX} down -v --remove-orphans
 	assert_success
 }
