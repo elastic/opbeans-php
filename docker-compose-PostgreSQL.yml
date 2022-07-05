@@ -2,10 +2,7 @@ version: '2.1'
 
 services:
   opbeans-php-app:
-    build:
-      context: .
-      args:
-        PHP_DB_extension: pdo_pgsql
+    build: .
     image: opbeans/opbeans-php:latest
     container_name: ${OPBEANS_PHP_APP_CONTAINER_NAME:-opbeans-php-app}
     environment:
@@ -19,7 +16,6 @@ services:
       - DB_HOST=opbeans-php-db-pgsql
       - DB_PORT=5432
       - DB_CONNECTION=pgsql
-#      - DB_DATABASE=opbeans_php_db_database
       - DB_DATABASE=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=opbeans_php_db_password
@@ -41,8 +37,6 @@ services:
     image: postgres:14.4
     restart: always
     environment:
-#      - POSTGRES_DB=opbeans_php_db_database
-#      - POSTGRES_USER=root
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=opbeans_php_db_password
     healthcheck:

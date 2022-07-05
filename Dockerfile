@@ -2,8 +2,6 @@ FROM php:8.1-fpm
 
 WORKDIR /var/www
 
-ARG PHP_DB_extension
-
 RUN apt-get update && apt-get install -y \
       apt-utils \
       libpq-dev \
@@ -11,7 +9,8 @@ RUN apt-get update && apt-get install -y \
       libzip-dev \
       zip unzip \
       git && \
-      docker-php-ext-install ${PHP_DB_extension} && \
+      docker-php-ext-install pdo_mysql && \
+      docker-php-ext-install pdo_pgsql && \
       docker-php-ext-install bcmath && \
       docker-php-ext-install gd && \
       docker-php-ext-install zip && \

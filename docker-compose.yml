@@ -2,15 +2,10 @@ version: '2.1'
 
 services:
   opbeans-php-app:
-    build:
-      context: .
-      args:
-        PHP_DB_extension: pdo_mysql
+    build: .
     image: opbeans/opbeans-php:latest
     container_name: ${OPBEANS_PHP_APP_CONTAINER_NAME:-opbeans-php-app}
     environment:
-      - OPBEANS_SERVICES=opbeans-python-api
-      - OPBEANS_DT_PROBABILITY=1
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-Opbeans-PHP}
       - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
       - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
