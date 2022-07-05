@@ -54,3 +54,4 @@ public/ob.js
 resources/views/_local_rendered_by_frontend.blade.php
 _docker/app/Dockerfile
 _local_docker-compose.yml
+/z_local_*
