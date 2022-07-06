@@ -1,0 +1,2 @@
+OPBEANS_DT_PROBABILITY=1
+OPBEANS_SERVICES="http://opbeans-python:3000, http://opbeans-java:3000"
