@@ -1,14 +1,14 @@
 version: '2.1'
 
 services:
-  opbeans-php-app:
+  opbeans-php:
     build: .
     image: opbeans/opbeans-php:latest
-    container_name: ${OPBEANS_PHP_APP_CONTAINER_NAME:-opbeans-php-app}
+    container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
     environment:
-      - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-Opbeans-PHP}
-      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-production}
       - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
+      - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-opbeans-php}
+      - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-demo}
       - ELASTIC_APM_LOG_LEVEL
       - ELASTIC_APM_JS_SERVER_URL=${ELASTIC_APM_JS_SERVER_URL:-http://localhost:8200}
       - ELASTIC_APM_JS_SERVICE_NAME=${ELASTIC_APM_JS_SERVICE_NAME:-opbeans-react}
@@ -19,21 +19,32 @@ services:
       - DB_DATABASE=opbeans_php_db_database
       - DB_USERNAME=${DB_USERNAME:-root}
       - DB_PASSWORD=opbeans_php_db_password
+      - OPBEANS_DT_PROBABILITY
+      - OPBEANS_SERVICES
     depends_on:
       opbeans-php-db-mysql:
         condition: service_healthy
-      opbeans-php-db-pgsql:
+      apm-server:
         condition: service_healthy
+    # from opbeans-ruby
+    healthcheck:
+      test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://opbeans-php:9000/"]
+      retries: 10
+      interval: 10s
 
-  opbeans-php-web:
+  opbeans-php-frontend:
     build:
       context: .
-      dockerfile: Dockerfile-web
-    container_name: ${OPBEANS_PHP_WEB_CONTAINER_NAME:-opbeans-php-web}
+      dockerfile: Dockerfile-frontend
+    container_name: ${OPBEANS_PHP_FRONTEND_CONTAINER_NAME:-opbeans-php-frontend}
     ports:
-      - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
+      - "${OPBEANS_PHP_FRONTEND_HOST:-127.0.0.1}:${OPBEANS_PHP_FRONTEND_PORT:-8000}:80"
     depends_on:
-      - opbeans-php-app
+      - opbeans-php
+    healthcheck:
+      test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://opbeans-php-frontend:80/"]
+      retries: 10
+      interval: 10s
 
   opbeans-php-db-mysql:
     image: mysql:8.0
@@ -44,18 +55,6 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     healthcheck:
       test: [ "CMD", "mysqladmin", "--host=localhost" ,"ping" ]
-      timeout: 20s
-      retries: 10
-
-  opbeans-php-db-pgsql:
-    image: postgres:14.4
-    restart: always
-    environment:
-      - POSTGRES_DB=opbeans_php_db_database
-      - POSTGRES_USER=${DB_USERNAME:-postgres}
-      - POSTGRES_PASSWORD=opbeans_php_db_password
-    healthcheck:
-      test: ["CMD", "pg_isready", "--quiet"]
       timeout: 20s
       retries: 10
 
@@ -92,6 +91,8 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+      kibana:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://apm-server:8200/"]
       retries: 10
@@ -123,8 +124,6 @@ services:
       test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'"]
       retries: 10
       interval: 20s
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
 
   kibana:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION:-7.17.4}
@@ -146,6 +145,8 @@ services:
       elasticsearch:
         condition: service_healthy
 
-volumes:
-  esdata:
-    driver: local
+  wait:
+    image: busybox
+    depends_on:
+      opbeans-php-frontend:
+        condition: service_healthy

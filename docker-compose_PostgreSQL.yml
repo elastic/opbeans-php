@@ -1,0 +1,20 @@
+version: '2.1'
+
+services:
+  opbeans-php-db-pgsql:
+    image: postgres:14.4
+    restart: always
+    environment:
+      - POSTGRES_DB=opbeans_php_db_database
+      - POSTGRES_USER=${DB_USERNAME:-postgres}
+      - POSTGRES_PASSWORD=opbeans_php_db_password
+    healthcheck:
+      test: ["CMD", "pg_isready", "--quiet"]
+      timeout: 20s
+      retries: 10
+
+  wait:
+    image: busybox
+    depends_on:
+      opbeans-php-db-pgsql:
+        condition: service_healthy
