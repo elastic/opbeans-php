@@ -96,13 +96,10 @@ testImpl() {
 	run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_FRONTEND_CONTAINER_NAME}
 	assert_output --partial 'true'
 
+	sleep 50
     run curl -v --fail --connect-timeout 10 --max-time 30 "http://127.0.0.1:${PORT}/"
 	assert_success
 	assert_output --partial 'HTTP/1.1 200'
-
-    # run curl -v --fail --connect-timeout 10 --max-time 30 "http://${OPBEANS_PHP_CONTAINER_NAME}:9000/"
-	# assert_success
-	# assert_output --partial 'HTTP/1.1 200'
 
     run echo "Tear down - Stop docker containers"
 
