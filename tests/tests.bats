@@ -7,22 +7,12 @@ load test_helpers
 IMAGE="bats-opbeans"
 OPBEANS_PHP_CONTAINER_NAME="opbeans-php"
 OPBEANS_PHP_FRONTEND_CONTAINER_NAME="opbeans-php-frontend"
-DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX="docker-compose --env-file docker-compose_env_for_PostgreSQL.txt"
-
-runCommand() {
-    local -r command_to_run="$@"
-    run echo "Running command: ${command_to_run} ..."
-    run ${command_to_run}
-	assert_success
-    run echo "Output: ${output}"
-    run echo "${output}"
-}
 
 assertRunningWebServer() {
     local -r web_server_desc="$1"
     local -r web_server_url="$2"
     run echo "Assert that ${web_server_desc} responds at ${web_server_url}"
-	runCommand curl -v --fail --connect-timeout 10 --max-time 30 "${web_server_url}"
+	run curl -v --fail --connect-timeout 10 --max-time 30 "${web_server_url}"
 	assert_output --partial 'HTTP/1.1 200'
 }
 
@@ -40,17 +30,17 @@ testImpl() {
     run echo "Arrange - Build docker images"
 
     cd $BATS_TEST_DIRNAME/..
-    runCommand ${docker_compose_cmd_prefix} build
+    run ${docker_compose_cmd_prefix} build
 
     run echo "Act - Start docker containers"
 
-	runCommand ${docker_compose_cmd_prefix} up -d
+	run ${docker_compose_cmd_prefix} up -d
 
     run echo "Assert that docker containers are running"
 
-	runCommand docker inspect -f {{.State.Running}} ${OPBEANS_PHP_CONTAINER_NAME}
+	run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_CONTAINER_NAME}
 	assert_output --partial 'true'
-	runCommand docker inspect -f {{.State.Running}} ${OPBEANS_PHP_FRONTEND_CONTAINER_NAME}
+	run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_FRONTEND_CONTAINER_NAME}
 	assert_output --partial 'true'
 
     assertRunningWebServer "opbeans frontend" "http://127.0.0.1:${PORT}/"
@@ -59,7 +49,7 @@ testImpl() {
 
     run echo "Tear down - Stop docker containers"
 
-	runCommand ${docker_compose_cmd_prefix} down -v --remove-orphans
+	run ${docker_compose_cmd_prefix} down -v --remove-orphans
 }
 
 @test "Test with defaults" {
