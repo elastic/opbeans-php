@@ -5,8 +5,8 @@ load 'test_helper/bats-assert/load'
 load test_helpers
 
 IMAGE="bats-opbeans"
-OPBEANS_PHP_APP_CONTAINER_NAME="opbeans-php-app"
-OPBEANS_PHP_WEB_CONTAINER_NAME="opbeans-php-web"
+OPBEANS_PHP_CONTAINER_NAME="opbeans-php"
+OPBEANS_PHP_FRONTEND_CONTAINER_NAME="opbeans-php-frontend"
 DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX="docker-compose --env-file docker-compose_env_for_PostgreSQL.txt"
 
 @test "Arrange - Build docker images" {
@@ -21,8 +21,8 @@ DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX="docker-compose --env-file docker-comp
 }
 
 @test "Assert that docker containers are running" {
-	run docker inspect -f {{.State.Running}} $OPBEANS_PHP_APP_CONTAINER_NAME
-	run docker inspect -f {{.State.Running}} $OPBEANS_PHP_WEB_CONTAINER_NAME
+	run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_CONTAINER_NAME}
+	run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_FRONTEND_CONTAINER_NAME}
 	assert_output --partial 'true'
 }
 
@@ -51,8 +51,8 @@ DOCKER_COMPOSE_WITH_POSTGRESQL_CMD_PREFIX="docker-compose --env-file docker-comp
 }
 
 @test "Assert that docker containers are running [with PostgreSQL as DB]" {
-	run docker inspect -f {{.State.Running}} $OPBEANS_PHP_APP_CONTAINER_NAME
-	run docker inspect -f {{.State.Running}} $OPBEANS_PHP_WEB_CONTAINER_NAME
+	run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_CONTAINER_NAME}
+	run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_FRONTEND_CONTAINER_NAME}
 	assert_output --partial 'true'
 }
 
