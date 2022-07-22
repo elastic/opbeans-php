@@ -25,5 +25,5 @@ RUN chmod -R 777 /app
 
 WORKDIR /app
 
-ENTRYPOINT ["_docker/app/docker-entrypoint-one-container.sh"]
+ENTRYPOINT ["/app/docker-entrypoint-one-container.sh"]
 CMD ["supervisord"]
