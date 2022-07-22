@@ -2,4 +2,4 @@
 
 php artisan migrate:fresh --seed
 
-/entrypoint "supervisord"
+php-fpm
