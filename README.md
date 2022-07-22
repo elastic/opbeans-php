@@ -18,7 +18,7 @@ OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker-compose up
 ```
 will make Opbeans-PHP web UI accessible remotely for example
 ```
-http://<my-opbeans-test-VM>:8976
+http://<my-opbeans-test-VM>:9876
 ```
 
 Kibana web UI is accessible at:
@@ -33,6 +33,12 @@ KIBANA_HOST=0.0.0.0 KIBANA_PORT=9877 docker-compose up
 will make Opbeans-PHP web UI accessible remotely for example
 ```
 http://<my-opbeans-test-VM>:9877
+```
+
+## How to run locally with PostgreSQL as database instead of MySQL
+
+```bash
+docker-compose --env-file docker-compose_env_for_PostgreSQL.txt up
 ```
 
 ## How to test locally
