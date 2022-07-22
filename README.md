@@ -7,18 +7,27 @@ To run locally, including Server, Kibana and Elasticsearch, use the provided doc
 docker-compose up
 ```
 
-Opbeans-PHP web UI is accessible at:
+Opbeans web UI is accessible at:
 ```
 http://localhost:8000
 ```
-You can change it by setting `OPBEANS_PHP_HOST` and/or `OPBEANS_PHP_PORT` environment variables.
+You can change it by setting `OPBEANS_PHP_FRONTEND_HOST` and/or `OPBEANS_PHP_FRONTEND_PORT` environment variables.
 For example 
 ```bash
-OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker-compose up
+OPBEANS_PHP_FRONTEND_HOST=0.0.0.0 OPBEANS_PHP_FRONTEND_PORT=9876 docker-compose up
 ```
-will make Opbeans-PHP web UI accessible remotely for example
+will make Opbeans web UI accessible remotely for example
 ```
 http://<my-opbeans-test-VM>:9876
+```
+
+*Note*: if you do access Opbeans web UI remotely
+you will also need to define `ELASTIC_APM_JS_SERVER_URL` and `APM_SERVER_HOST`
+so that RUM-JS (Real User Monitoring JavaScript) Agent can send data to APM Server as well.
+
+For example
+```bash
+ELASTIC_APM_JS_SERVER_URL="http://my-opbeans-test-vm:8200" APM_SERVER_HOST=0.0.0.0 OPBEANS_PHP_FRONTEND_HOST=0.0.0.0 OPBEANS_PHP_FRONTEND_PORT=9876 docker-compose up
 ```
 
 Kibana web UI is accessible at:
@@ -30,15 +39,26 @@ For example
 ```bash
 KIBANA_HOST=0.0.0.0 KIBANA_PORT=9877 docker-compose up
 ```
-will make Opbeans-PHP web UI accessible remotely for example
-```
-http://<my-opbeans-test-VM>:9877
-```
+will make Kibana web UI accessible remotely.
 
-## How to run locally with PostgreSQL as database instead of MySQL
+## How to run locally with PostgreSQL
+
+By default, docker containers combination implementing Opbeans-PHP uses MySQL as its database.
+You can use the following command line to use PostgreSQL instead:  
 
 ```bash
-docker-compose --env-file docker-compose_env_for_PostgreSQL.txt up
+docker-compose --env-file docker-compose_env_for_PostgreSQL.txt -f docker-compose_PostgreSQL.yml -f docker-compose.yml up
+```
+
+## How to run locally to demo distributed tracing between backend services
+
+By default, only distributed tracing between the frontend and backend implemented by Opbeans-PHP
+is demonstrated.
+The following command will run additional backend services
+and demonstrate distributed tracing from Opbeans-PHP to those additional backend services:   
+
+```bash
+docker-compose --env-file docker-compose_env_for_backend_distributed_tracing.txt -f docker-compose.yml -f docker-compose_backend_distributed_tracing.yml up
 ```
 
 ## How to test locally
