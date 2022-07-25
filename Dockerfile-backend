@@ -21,8 +21,8 @@ COPY ./_docker/app/php.ini /usr/local/etc/php/conf.d/php.ini
 ADD . /var/www/
 
 RUN mkdir -p /usr/bin
-RUN mv /var/www/docker-entrypoint-two-containers.sh /usr/bin/
-RUN chmod a+x /usr/bin/docker-entrypoint.sh
+RUN mv /var/www/docker_entrypoint_two_containers.sh /usr/bin/
+RUN chmod a+x /usr/bin/docker_entrypoint_two_containers.sh
 
 COPY --from=opbeans/opbeans-frontend:latest /app/build/index.html /var/www/resources/views/page_from_frontend.blade.php
 
@@ -38,4 +38,4 @@ RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/a
 
 RUN chown -R www-data:www-data /var/www
 
-ENTRYPOINT ["/usr/bin/docker-entrypoint-two-containers.sh"]
+ENTRYPOINT ["/usr/bin/docker_entrypoint_two_containers.sh"]

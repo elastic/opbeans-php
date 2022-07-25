@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-one-container
+    image: opbeans/opbeans-php:latest
     container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
     ports:
       - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
@@ -23,6 +24,8 @@ services:
       - DB_USERNAME=${DB_USERNAME:-root}
       - DB_PASSWORD=opbeans_php_db_password
       - WEB_DOCUMENT_ROOT=/app/public/
+      - OPBEANS_DT_PROBABILITY
+      - OPBEANS_SERVICES      
     depends_on:
       opbeans-php-db-mysql:
         condition: service_healthy

@@ -11,10 +11,10 @@ Opbeans web UI is accessible at:
 ```
 http://localhost:8000
 ```
-You can change it by setting `OPBEANS_PHP_FRONTEND_HOST` and/or `OPBEANS_PHP_FRONTEND_PORT` environment variables.
+You can change it by setting `OPBEANS_PHP_HOST` and/or `OPBEANS_PHP_PORT` environment variables.
 For example 
 ```bash
-OPBEANS_PHP_FRONTEND_HOST=0.0.0.0 OPBEANS_PHP_FRONTEND_PORT=9876 docker-compose up
+OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker-compose up
 ```
 will make Opbeans web UI accessible remotely for example
 ```
@@ -27,7 +27,7 @@ so that RUM-JS (Real User Monitoring JavaScript) Agent can send data to APM Serv
 
 For example
 ```bash
-ELASTIC_APM_JS_SERVER_URL="http://my-opbeans-test-vm:8200" APM_SERVER_HOST=0.0.0.0 OPBEANS_PHP_FRONTEND_HOST=0.0.0.0 OPBEANS_PHP_FRONTEND_PORT=9876 docker-compose up
+ELASTIC_APM_JS_SERVER_URL="http://my-opbeans-test-vm:8200" APM_SERVER_HOST=0.0.0.0 OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker-compose up
 ```
 
 Kibana web UI is accessible at:
