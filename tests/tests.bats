@@ -6,7 +6,6 @@ load test_helpers
 
 IMAGE="bats-opbeans"
 OPBEANS_PHP_CONTAINER_NAME="opbeans-php"
-OPBEANS_PHP_FRONTEND_CONTAINER_NAME="opbeans-php-frontend"
 
 testImpl() {
     run echo "Starting test with arguments: $@"
@@ -34,8 +33,6 @@ testImpl() {
 
     run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_CONTAINER_NAME}
     assert_output --partial 'true'
-    run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_FRONTEND_CONTAINER_NAME}
-    assert_output --partial 'true'
 
     sleep 50
     run curl -v --fail --connect-timeout 10 --max-time 30 "http://127.0.0.1:${PORT}/"
@@ -52,10 +49,22 @@ testImpl() {
     testImpl
 }
 
+@test "Test with separate containers for frontend and backend" {
+    testImpl "-f docker-compose_two_containers.yml"
+}
+
 @test "Test with PostgreSQL as DB" {
     testImpl "--env-file docker-compose_env_for_PostgreSQL.txt -f docker-compose_PostgreSQL.yml -f docker-compose.yml"
 }
 
+@test "Test with PostgreSQL as DB with separate containers for frontend and backend" {
+    testImpl "--env-file docker-compose_env_for_PostgreSQL.txt -f docker-compose_PostgreSQL.yml -f docker-compose_two_containers.yml"
+}
+
 @test "Test with backend distributed tracing" {
     testImpl "--env-file docker-compose_env_for_backend_distributed_tracing.txt -f docker-compose.yml -f docker-compose_backend_distributed_tracing.yml"
+}
+
+@test "Test with backend distributed tracing with separate containers for frontend and backend" {
+    testImpl "--env-file docker-compose_env_for_backend_distributed_tracing.txt -f docker-compose_two_containers.yml -f docker-compose_backend_distributed_tracing.yml"
 }

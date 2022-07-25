@@ -1,0 +1,29 @@
+FROM webdevops/php-nginx:8.0
+
+COPY --from=opbeans/opbeans-frontend:latest /app/build  /app/public
+#
+COPY --from=opbeans/opbeans-frontend:latest /app/package.json /app/package.json
+
+ADD . /app
+
+COPY --from=opbeans/opbeans-frontend:latest /app/build/index.html /app/resources/views/page_from_frontend.blade.php
+
+# Install composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --filename=composer \
+    --install-dir=/usr/local/bin
+
+RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.5/apm-agent-php_1.5_all.deb > /tmp/apm-gent-php.deb \
+    && dpkg -i /tmp/apm-gent-php.deb
+
+RUN composer install -d /app
+
+RUN chown -R www-data:www-data /app
+
+RUN chmod -R 777 /app
+
+WORKDIR /app
+
+ENTRYPOINT ["/app/docker_entrypoint_one_container.sh"]
+CMD ["supervisord"]

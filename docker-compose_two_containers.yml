@@ -1,14 +1,11 @@
 version: '2.1'
 
 services:
-  opbeans-php:
+  opbeans-php-backend:
     build:
       context: .
-      dockerfile: Dockerfile-one-container
-    image: opbeans/opbeans-php:latest
-    container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
-    ports:
-      - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
+      dockerfile: Dockerfile-backend
+    container_name: ${OPBEANS_PHP_BACKEND_CONTAINER_NAME:-opbeans-php-backend}
     environment:
       - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-opbeans-php}
@@ -23,15 +20,23 @@ services:
       - DB_DATABASE=opbeans_php_db_database
       - DB_USERNAME=${DB_USERNAME:-root}
       - DB_PASSWORD=opbeans_php_db_password
-      - WEB_DOCUMENT_ROOT=/app/public/
       - OPBEANS_DT_PROBABILITY
-      - OPBEANS_SERVICES      
+      - OPBEANS_SERVICES
     depends_on:
       opbeans-php-db-mysql:
         condition: service_healthy
       apm-server:
         condition: service_healthy
-    # from opbeans-ruby
+
+  opbeans-php:
+    build:
+      context: .
+      dockerfile: Dockerfile-frontend
+    container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
+    ports:
+      - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
+    depends_on:
+      - opbeans-php-backend
     healthcheck:
       test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://localhost:80/"]
       retries: 10
@@ -43,8 +48,6 @@ services:
     environment:
       - MYSQL_DATABASE=opbeans_php_db_database
       - MYSQL_ROOT_PASSWORD=opbeans_php_db_password
-    ports:
-      - 8102:3306
     command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
     healthcheck:
       test: [ "CMD", "mysqladmin", "--host=localhost" ,"ping" ]
