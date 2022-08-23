@@ -8,7 +8,7 @@ services:
     image: opbeans/opbeans-php:latest
     container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
     ports:
-      - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:80"
+      - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:3000"
     environment:
       - ELASTIC_APM_SERVER_URL=${ELASTIC_APM_SERVER_URL:-http://apm-server:8200}
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-opbeans-php}
@@ -25,7 +25,7 @@ services:
       - DB_PASSWORD=opbeans_php_db_password
       - WEB_DOCUMENT_ROOT=/app/public/
       - OPBEANS_DT_PROBABILITY
-      - OPBEANS_SERVICES      
+      - OPBEANS_SERVICES
     depends_on:
       opbeans-php-db-mysql:
         condition: service_healthy
@@ -33,7 +33,7 @@ services:
         condition: service_healthy
     # from opbeans-ruby
     healthcheck:
-      test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://localhost:80/"]
+      test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://localhost:3000/"]
       retries: 10
       interval: 10s
 
