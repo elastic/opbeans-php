@@ -4,7 +4,7 @@ services:
   opbeans-php:
     build:
       context: .
-      dockerfile: Dockerfile-one-container
+      dockerfile: Dockerfile
     image: opbeans/opbeans-php:latest
     container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
     ports:
