@@ -12,7 +12,7 @@ help: ## Display this help text
 all: build test
 
 build: ## Build docker image
-	@docker build --file Dockerfile --tag=${IMAGE}:${VERSION} .
+	@docker build --tag=${IMAGE}:${VERSION} .
 
 bats: ## Install bats in the project itself
 	@git clone https://github.com/sstephenson/bats.git
