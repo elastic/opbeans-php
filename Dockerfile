@@ -25,5 +25,6 @@ RUN chmod -R 777 /app
 
 WORKDIR /app
 
+ENV WEB_DOCUMENT_ROOT=/app/public/
 ENTRYPOINT ["/app/docker_entrypoint_one_container.sh"]
 CMD ["supervisord"]
