@@ -23,7 +23,6 @@ services:
       - DB_DATABASE=opbeans_php_db_database
       - DB_USERNAME=${DB_USERNAME:-root}
       - DB_PASSWORD=opbeans_php_db_password
-      - WEB_DOCUMENT_ROOT=/app/public/
       - OPBEANS_DT_PROBABILITY
       - OPBEANS_SERVICES
     depends_on:
