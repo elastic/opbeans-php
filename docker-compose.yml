@@ -5,7 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: opbeans/opbeans-php:latest
+      args:
+        OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY: "${OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY:-}"
+        OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL: "${OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL:-}"
+        OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION: "${OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION:-}"
     container_name: ${OPBEANS_PHP_CONTAINER_NAME:-opbeans-php}
     ports:
       - "${OPBEANS_PHP_HOST:-127.0.0.1}:${OPBEANS_PHP_PORT:-8000}:3000"
@@ -14,9 +17,14 @@ services:
       - ELASTIC_APM_SERVICE_NAME=${ELASTIC_APM_SERVICE_NAME:-opbeans-php}
       - ELASTIC_APM_ENVIRONMENT=${ELASTIC_APM_ENVIRONMENT:-demo}
       - ELASTIC_APM_LOG_LEVEL
+      - ELASTIC_APM_LOG_LEVEL_STDERR
+      - ELASTIC_APM_LOG_LEVEL_SYSLOG
+      - ELASTIC_APM_LOG_LEVEL_FILE
+      - ELASTIC_APM_LOG_FILE
       - ELASTIC_APM_JS_SERVER_URL=${ELASTIC_APM_JS_SERVER_URL:-http://localhost:8200}
       - ELASTIC_APM_JS_SERVICE_NAME=${ELASTIC_APM_JS_SERVICE_NAME:-opbeans-react}
       - ELASTIC_APM_JS_SERVICE_VERSION
+      - ELASTIC_APM_ENABLED
       - DB_HOST=${DB_HOST:-opbeans-php-db-mysql}
       - DB_PORT=${DB_PORT:-3306}
       - DB_CONNECTION=${DB_CONNECTION:-mysql}
@@ -30,9 +38,8 @@ services:
         condition: service_healthy
       apm-server:
         condition: service_healthy
-    # from opbeans-ruby
     healthcheck:
-      test: ["CMD", "curl", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://localhost:3000/"]
+      test: ["CMD", "curl", "--max-time", "10", "--write-out", "'HTTP %{http_code}'", "--silent", "--output", "/dev/null", "http://localhost:3000/"]
       retries: 10
       interval: 10s
 
