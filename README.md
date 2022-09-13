@@ -61,6 +61,32 @@ and demonstrate distributed tracing from Opbeans-PHP to those additional backend
 docker-compose --env-file docker-compose_env_for_backend_distributed_tracing.txt -f docker-compose.yml -f docker-compose_backend_distributed_tracing.yml up
 ```
 
+## How to run locally with custom Elastic APM PHP agent release version
+
+By default, the latest release version of Elastic APM PHP agent is used.
+You can use `OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION` environment variable to configure release version of Elastic APM PHP agent to use.
+For example:
+
+```bash
+OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION=1.5 docker-compose up
+```
+
+## How to run locally with local Elastic APM PHP agent code instead of a release version
+
+By default, the latest release version of Elastic APM PHP agent is used.
+You can use `OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY` and `OPBEANS_PHP_AGENT_INSTALL_LOCAL_SRC` environment variables
+with the following command line to use local version of Elastic APM PHP agent.
+- `OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY` should point to a compiled PHP extension binary
+- `OPBEANS_PHP_AGENT_INSTALL_LOCAL_SRC` should point to `src` directory containing agent's PHP part
+
+For example:
+
+```bash
+OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY=/home/user/git/apm-agent-php/src/ext/modules/elastic_apm.so \
+OPBEANS_PHP_AGENT_INSTALL_LOCAL_SRC=/home/user/git/apm-agent-php/src \
+docker-compose -f docker-compose_local_agent_code.yml -f docker-compose.yml up
+```
+
 ## How to test locally
 
 The simplest way to test this demo is by running:

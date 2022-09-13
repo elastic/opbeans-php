@@ -27,6 +27,7 @@ class DTInterceptor
             return $reason . ' - forwarding to other backend services will be disabled';
         };
 
+        $serviceName = config('app.name');
         $probabilityEnvVarVal = env(self::OPBEANS_DT_PROBABILITY_ENV_VAR_NAME);
         if ($probabilityEnvVarVal === null) {
             Log::info(

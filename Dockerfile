@@ -1,5 +1,24 @@
 FROM webdevops/php-nginx:8.0
 
+ARG OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY=""
+ENV OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY="$OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY"
+ARG OPBEANS_PHP_AGENT_INSTALL_LOCAL_SRC=""
+ENV OPBEANS_PHP_AGENT_INSTALL_LOCAL_SRC="$OPBEANS_PHP_AGENT_INSTALL_LOCAL_SRC"
+ARG OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL=""
+ENV OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL="$OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL"
+ARG OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION=""
+ENV OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION="$OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION"
+
+RUN echo "OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY: $OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY"
+RUN OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY=$OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY echo "OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY: $OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY"
+
+#
+# Replace port in "listen 80 default_server;" and "listen [::]:80 default_server;"
+#
+RUN cp /opt/docker/etc/nginx/vhost.conf /tmp/opt_docker_etc_nginx_vhost.conf_before_port_replace && \
+    sed 's|listen 80 default_server;|listen 3000 default_server;|' /tmp/opt_docker_etc_nginx_vhost.conf_before_port_replace | \
+        sed 's|listen \[::\]:80 default_server;|listen [::]:3000 default_server;|' > /opt/docker/etc/nginx/vhost.conf
+
 COPY --from=opbeans/opbeans-frontend:latest /app/build  /app/public
 #
 COPY --from=opbeans/opbeans-frontend:latest /app/package.json /app/package.json
@@ -14,14 +33,13 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
     --filename=composer \
     --install-dir=/usr/local/bin
 
-RUN curl -fsSL https://github.com/elastic/apm-agent-php/releases/download/v1.6/apm-agent-php_1.6_all.deb > /tmp/apm-gent-php.deb \
-    && dpkg -i /tmp/apm-gent-php.deb
-
 RUN composer install -d /app
 
 RUN chown -R www-data:www-data /app
 
 RUN chmod -R 777 /app
+
+RUN /app/install_agent.sh
 
 WORKDIR /app
 
