@@ -1,3 +1,5 @@
+[![Build Status](https://github.com/elastic/opbeans-php/actions/workflows/test.yml/badge.svg)](https://github.com/elastic/opbeans-php/actions/workflows/test.yml)
+
 # opbeans-php
 PHP backend implementation for Opbeans, Elastic APM demo app
 
