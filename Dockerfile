@@ -1,3 +1,6 @@
+ARG OPBEANS_FRONTEND_TAG=""
+FROM opbeans/opbeans-frontend:$OPBEANS_FRONTEND_TAG as opbeans-frontend
+
 FROM webdevops/php-nginx:8.0
 
 ARG OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY=""
@@ -8,6 +11,7 @@ ARG OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL=""
 ENV OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL="$OPBEANS_PHP_AGENT_INSTALL_PACKAGE_FROM_URL"
 ARG OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION=""
 ENV OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION="$OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION"
+ENV OPBEANS_FRONTEND_TAG="$OPBEANS_FRONTEND_TAG"
 
 RUN echo "OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY: $OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY"
 RUN OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY=$OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY echo "OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY: $OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY"
@@ -19,13 +23,15 @@ RUN cp /opt/docker/etc/nginx/vhost.conf /tmp/opt_docker_etc_nginx_vhost.conf_bef
     sed 's|listen 80 default_server;|listen 3000 default_server;|' /tmp/opt_docker_etc_nginx_vhost.conf_before_port_replace | \
         sed 's|listen \[::\]:80 default_server;|listen [::]:3000 default_server;|' > /opt/docker/etc/nginx/vhost.conf
 
-COPY --from=opbeans/opbeans-frontend:latest /app/build  /app/public
-#
-COPY --from=opbeans/opbeans-frontend:latest /app/package.json /app/package.json
+RUN echo "OPBEANS_FRONTEND_TAG: OPBEANS_FRONTEND_TAG"
+
+COPY --from=opbeans-frontend /app/build /app/public
+
+COPY --from=opbeans-frontend /app/package.json /app/package.json
 
 ADD . /app
 
-COPY --from=opbeans/opbeans-frontend:latest /app/build/index.html /app/resources/views/page_from_frontend.blade.php
+COPY --from=opbeans-frontend /app/build/index.html /app/resources/views/page_from_frontend.blade.php
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
