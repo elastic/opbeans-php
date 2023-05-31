@@ -1,4 +1,4 @@
-ARG OPBEANS_FRONTEND_TAG=""
+ARG OPBEANS_FRONTEND_TAG="5.11.1"
 FROM opbeans/opbeans-frontend:$OPBEANS_FRONTEND_TAG as opbeans-frontend
 
 FROM webdevops/php-nginx:8.0
