@@ -2,7 +2,7 @@
 
 set -xe
 
-OPBEANS_PHP_AGENT_DEFAULT_RELEASE_VERSION_TO_INSTALL=1.6.1
+OPBEANS_PHP_AGENT_DEFAULT_RELEASE_VERSION_TO_INSTALL=1.8.4
 
 install_local_code () {
     cat /app/local_agent_code_php.ini
