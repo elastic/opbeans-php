@@ -1,5 +1,5 @@
-ARG OPBEANS_FRONTEND_TAG="5.11.1"
-FROM opbeans/opbeans-frontend:$OPBEANS_FRONTEND_TAG as opbeans-frontend
+ARG OPBEANS_FRONTEND_TAG="agent-5.11.1"
+FROM opbeans/opbeans-frontend:$OPBEANS_FRONTEND_TAG as opbeans-frontend-alias
 
 FROM webdevops/php-nginx:8.0
 
@@ -25,13 +25,13 @@ RUN cp /opt/docker/etc/nginx/vhost.conf /tmp/opt_docker_etc_nginx_vhost.conf_bef
 
 RUN echo "OPBEANS_FRONTEND_TAG: OPBEANS_FRONTEND_TAG"
 
-COPY --from=opbeans-frontend /app/build /app/public
+COPY --from=opbeans-frontend-alias /app/build /app/public
 
-COPY --from=opbeans-frontend /app/package.json /app/package.json
+COPY --from=opbeans-frontend-alias /app/package.json /app/package.json
 
 ADD . /app
 
-COPY --from=opbeans-frontend /app/build/index.html /app/resources/views/page_from_frontend.blade.php
+COPY --from=opbeans-frontend-alias /app/build/index.html /app/resources/views/page_from_frontend.blade.php
 
 # Install composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
