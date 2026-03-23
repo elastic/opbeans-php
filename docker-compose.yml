@@ -1,5 +1,3 @@
-version: '2.1'
-
 services:
   opbeans-php:
     build:
@@ -59,7 +57,7 @@ services:
       retries: 10
 
   apm-server:
-    image: docker.elastic.co/apm/apm-server:${STACK_VERSION:-7.17.4}
+    image: docker.elastic.co/apm/apm-server:${STACK_VERSION:-7.17.14}
     ports:
       - "${APM_SERVER_HOST:-127.0.0.1}:${APM_SERVER_PORT:-8200}:8200"
       - "${APM_SERVER_MONITOR_HOST:-127.0.0.1}:${APM_SERVER_MONITOR_PORT:-6060}:6060"
@@ -99,20 +97,15 @@ services:
       interval: 10s
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION:-7.17.4}
+    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION:-7.17.14}
     environment:
       - cluster.name=docker-cluster
       - xpack.security.enabled=false
-      - bootstrap.memory_lock=true
+      - bootstrap.memory_lock=false
       - network.host=0.0.0.0
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-      - "path.data=/usr/share/elasticsearch/data/${STACK_VERSION:-7.17.4}"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    mem_limit: 2g
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "path.data=/usr/share/elasticsearch/data/${STACK_VERSION:-7.17.14}"
     logging:
       driver: 'json-file'
       options:
@@ -126,7 +119,7 @@ services:
       interval: 20s
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:${STACK_VERSION:-7.17.4}
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION:-7.17.14}
     environment:
       SERVER_NAME: kibana.example.org
       ELASTICSEARCH_URL: http://elasticsearch:9200
