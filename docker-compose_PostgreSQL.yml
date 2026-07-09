@@ -1,5 +1,3 @@
-version: '2.1'
-
 services:
   opbeans-php-db-pgsql:
     image: postgres:14.4
