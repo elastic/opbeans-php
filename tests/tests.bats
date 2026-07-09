@@ -6,30 +6,29 @@ load test_helpers
 
 IMAGE="bats-opbeans"
 OPBEANS_PHP_CONTAINER_NAME="opbeans-php"
+DOCKER_COMPOSE_CMD_PREFIX="docker compose"
+
+setup() {
+    cd "$BATS_TEST_DIRNAME/.."
+}
+
+teardown() {
+    ${DOCKER_COMPOSE_CMD_PREFIX} down -v --remove-orphans || true
+}
 
 testImpl() {
-    run echo "Starting test with arguments: $@"
-
-    local -r docker_compose_options="$1"
+    local docker_compose_options="$1"
     if [ -n "${docker_compose_options}" ]; then
-        docker_compose_cmd_prefix="docker compose ${docker_compose_options}"
+        DOCKER_COMPOSE_CMD_PREFIX="docker compose ${docker_compose_options}"
     else
-        docker_compose_cmd_prefix="docker compose"
+        DOCKER_COMPOSE_CMD_PREFIX="docker compose"
     fi
-    run echo "docker_compose_cmd_prefix: ${docker_compose_cmd_prefix}"
 
-    run echo "Arrange - Build docker images"
-
-    cd $BATS_TEST_DIRNAME/..
-    run ${docker_compose_cmd_prefix} build
+    run ${DOCKER_COMPOSE_CMD_PREFIX} build
     assert_success
 
-    run echo "Act - Start docker containers"
-
-    run ${docker_compose_cmd_prefix} up -d
+    run ${DOCKER_COMPOSE_CMD_PREFIX} up -d
     assert_success
-
-    run echo "Assert that docker containers are running"
 
     run docker inspect -f {{.State.Running}} ${OPBEANS_PHP_CONTAINER_NAME}
     assert_output --partial 'true'
@@ -38,11 +37,6 @@ testImpl() {
     run curl -v --fail --connect-timeout 10 --max-time 30 "http://127.0.0.1:${PORT}/"
     assert_success
     assert_output --partial 'HTTP/1.1 200'
-
-    run echo "Tear down - Stop docker containers"
-
-    run ${docker_compose_cmd_prefix} down -v --remove-orphans
-    assert_success
 }
 
 @test "Test with defaults" {
