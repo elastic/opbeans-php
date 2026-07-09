@@ -12,9 +12,9 @@ testImpl() {
 
     local -r docker_compose_options="$1"
     if [ -n "${docker_compose_options}" ]; then
-        docker_compose_cmd_prefix="docker-compose ${docker_compose_options}"
+        docker_compose_cmd_prefix="docker compose ${docker_compose_options}"
     else
-        docker_compose_cmd_prefix="docker-compose"
+        docker_compose_cmd_prefix="docker compose"
     fi
     run echo "docker_compose_cmd_prefix: ${docker_compose_cmd_prefix}"
 

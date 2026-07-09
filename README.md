@@ -6,7 +6,7 @@ PHP backend implementation for Opbeans, Elastic APM demo app
 ## How to run locally
 To run locally, including Server, Kibana and Elasticsearch, use the provided docker compose file by running the commands
 ```bash
-docker-compose up
+docker compose up
 ```
 
 Opbeans web UI is accessible at:
@@ -16,7 +16,7 @@ http://localhost:8000
 You can change it by setting `OPBEANS_PHP_HOST` and/or `OPBEANS_PHP_PORT` environment variables.
 For example 
 ```bash
-OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker-compose up
+OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker compose up
 ```
 will make Opbeans web UI accessible remotely for example
 ```
@@ -29,7 +29,7 @@ so that RUM-JS (Real User Monitoring JavaScript) Agent can send data to APM Serv
 
 For example
 ```bash
-ELASTIC_APM_JS_SERVER_URL="http://my-opbeans-test-vm:8200" APM_SERVER_HOST=0.0.0.0 OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker-compose up
+ELASTIC_APM_JS_SERVER_URL="http://my-opbeans-test-vm:8200" APM_SERVER_HOST=0.0.0.0 OPBEANS_PHP_HOST=0.0.0.0 OPBEANS_PHP_PORT=9876 docker compose up
 ```
 
 Kibana web UI is accessible at:
@@ -39,7 +39,7 @@ http://localhost:5601
 You can change it by setting `KIBANA_HOST` and/or `KIBANA_PORT` environment variables.
 For example
 ```bash
-KIBANA_HOST=0.0.0.0 KIBANA_PORT=9877 docker-compose up
+KIBANA_HOST=0.0.0.0 KIBANA_PORT=9877 docker compose up
 ```
 will make Kibana web UI accessible remotely.
 
@@ -49,7 +49,7 @@ By default, docker containers combination implementing Opbeans-PHP uses MySQL as
 You can use the following command line to use PostgreSQL instead:  
 
 ```bash
-docker-compose --env-file docker-compose_env_for_PostgreSQL.txt -f docker-compose_PostgreSQL.yml -f docker-compose.yml up
+docker compose --env-file docker-compose_env_for_PostgreSQL.txt -f docker-compose_PostgreSQL.yml -f docker-compose.yml up
 ```
 
 ## How to run locally to demo distributed tracing between backend services
@@ -60,7 +60,7 @@ The following command will run additional backend services
 and demonstrate distributed tracing from Opbeans-PHP to those additional backend services:   
 
 ```bash
-docker-compose --env-file docker-compose_env_for_backend_distributed_tracing.txt -f docker-compose.yml -f docker-compose_backend_distributed_tracing.yml up
+docker compose --env-file docker-compose_env_for_backend_distributed_tracing.txt -f docker-compose.yml -f docker-compose_backend_distributed_tracing.yml up
 ```
 
 ## How to run locally with custom Elastic APM PHP agent release version
@@ -70,7 +70,7 @@ You can use `OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION` environment variable to 
 For example:
 
 ```bash
-OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION=1.5 docker-compose up
+OPBEANS_PHP_AGENT_INSTALL_RELEASE_VERSION=1.5 docker compose up
 ```
 
 ## How to run locally with local Elastic APM PHP agent code instead of a release version
@@ -86,7 +86,7 @@ For example:
 ```bash
 OPBEANS_PHP_AGENT_INSTALL_LOCAL_EXTENSION_BINARY=/home/user/git/apm-agent-php/src/ext/modules/elastic_apm.so \
 OPBEANS_PHP_AGENT_INSTALL_LOCAL_SRC=/home/user/git/apm-agent-php/src \
-docker-compose -f docker-compose_local_agent_code.yml -f docker-compose.yml up
+docker compose -f docker-compose_local_agent_code.yml -f docker-compose.yml up
 ```
 
 ## How to test locally
